@@ -1,0 +1,11 @@
+#Ant properties
+#Wed Mar 03 11:28:04 CET 2021
+version.api=1905
+vendor=hybris
+group.id=de.hybris.platform
+name=OpenAIAutoDescriptionGenerator
+description=OpenAIAutoDescriptionGenerator
+builddate=20210303 1127
+releasedate=20190628 1509
+version=1905.25
+module.name=platform-module
