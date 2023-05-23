@@ -11,6 +11,7 @@ import de.hybris.platform.servicelayer.cronjob.PerformResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -28,21 +29,24 @@ public class ProductDescriptionTranslationJob extends AbstractJobPerformable<Pro
         try {
             // Retrieve all products with non-empty descriptions
             List<ProductModel> products = this.productTranslationService.getAllProducts();
+            List<String> languages = this.productTranslationService.getLanguages();
             for (ProductModel product : products) {
-                // Get the languages from the product features
-                List<LanguageModel> languages = this.productTranslationService.getLanguagesFromProductFeatures(product);
                 // Generate translations for each language
-                for (LanguageModel language : languages) {
-                    Locale locale = new Locale(language.getIsocode(), language.getIsocode().toUpperCase());
+                for (int i = 0 ; i< 3; i++) {
+                   Locale locale = new Locale(languages.get(i).toLowerCase(), languages.get(i).toUpperCase());
+                   if(!languages.get(i).equals("en") || !languages.get(i).equals("fr")){
+                       System.out.println("not en or fr"+ languages.get(i));
+                       if (product.getDescription(locale) == null || product.getDescription(locale).isEmpty() || product.getDescription(locale).isBlank() || product.getDescription(locale).equals("")) {
+                           String translatedDescription = this.productTranslationService.generateTranslation(product.getDescription(), languages.get(i));
+                           this.productTranslationService.saveTranslatedDescription(product, languages.get(i), translatedDescription);
+                       }
+                   }
 
-                    if (product.getDescription(locale).isEmpty()) {
-                        System.out.println("yes empty");
-                        String translatedDescription = this.productTranslationService.generateTranslation(product.getDescription(), language.getIsocode());
-                        this.productTranslationService.saveTranslatedDescription(product, language, translatedDescription);
-                    }
                 }
+                return new PerformResult(CronJobResult.ERROR, CronJobStatus.ABORTED);
             }
         } catch (Exception e) {
+            e.getMessage();
             return new PerformResult(CronJobResult.ERROR, CronJobStatus.ABORTED);
         }
         return new PerformResult(CronJobResult.SUCCESS, CronJobStatus.FINISHED);

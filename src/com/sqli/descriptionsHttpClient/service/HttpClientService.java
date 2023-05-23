@@ -6,6 +6,6 @@ import java.net.URL;
 
 public interface HttpClientService {
     HttpURLConnection createConnection(URL apiUrl) throws Exception;
-    void sendRequest(HttpURLConnection conn, JsonObject body) throws Exception;
-    String getResponse(HttpURLConnection conn) throws Exception;
+    void sendRequest(HttpURLConnection httpURLConnection, JsonObject body) throws Exception;
+    String getResponse(HttpURLConnection httpURLConnection) throws Exception;
 }

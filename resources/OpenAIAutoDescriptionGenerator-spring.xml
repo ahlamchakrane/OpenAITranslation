@@ -89,8 +89,10 @@
 
 
     <!-- ProductDescription generation -->
+    <bean id="httpClientService" class="com.sqli.descriptionsHttpClient.service.impl.HttpClientImpl" />
 
     <bean id="productDescriptionService" class="com.sqli.descriptionsGeneration.service.impl.ProductDescriptionServiceImpl" >
+        <constructor-arg ref="httpClientService"/>
     </bean>
     <bean id="productDescriptionGenerationJob" class="com.sqli.descriptionsGeneration.jobs.ProductDescriptionGenerationJob" parent="abstractJob">
         <property name="sessionService" ref="defaultSessionService"/>
@@ -103,6 +105,7 @@
     <bean id="productTranslationService" class="com.sqli.descriptionsTranslation.service.impl.ProductTranslationServiceImpl">
         <constructor-arg ref="flexibleSearchService"/>
         <constructor-arg ref="modelService"/>
+        <constructor-arg ref="httpClientService" />
     </bean>
 
     <bean id="productDescriptionTranslationJob" class="com.sqli.descriptionsTranslation.jobs.ProductDescriptionTranslationJob" parent="abstractJob">

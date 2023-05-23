@@ -18,14 +18,18 @@ public class ProductDescriptionServiceImpl implements ProductDescriptionService 
     private String API_KEY ;
     @Value("${OpenAI.API_URL}")
     private String API_URL;
+    private HttpClientService httpClientService;
+    public ProductDescriptionServiceImpl(HttpClientService httpClientService){
+        this.httpClientService = httpClientService;
+    }
 
     public String generateProductDescription(String productName, String features) throws Exception {
         String prompt = createPrompt(productName, features);
         JsonObject body = createRequestBody(prompt);
         URL url = new URL(this.API_URL);
-        HttpURLConnection httpURLConnection = createConnection(url);
-        sendRequest(httpURLConnection, body);
-        String response = getResponse(httpURLConnection);
+        HttpURLConnection httpURLConnection = this.httpClientService.createConnection(url);
+        this.httpClientService.sendRequest(httpURLConnection, body);
+        String response = this.httpClientService.getResponse(httpURLConnection);
         String description = extractDescriptionText(response, prompt);
         return description;
     }
@@ -53,32 +57,5 @@ public class ProductDescriptionServiceImpl implements ProductDescriptionService 
         } catch (Exception e ){
             return e.getMessage();
         }
-    }
-    @Override
-    public HttpURLConnection createConnection(URL url) throws Exception {
-        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-        httpURLConnection.setRequestMethod("POST");
-        httpURLConnection.setRequestProperty("Content-Type", "application/json");
-        httpURLConnection.setRequestProperty("Authorization", "Bearer " + this.API_KEY);
-        httpURLConnection.setDoOutput(true);
-        return httpURLConnection;
-    }
-    @Override
-    public  void sendRequest(HttpURLConnection httpURLConnection, JsonObject body) throws Exception {
-        httpURLConnection.getOutputStream().write(body.toString().getBytes());
-        httpURLConnection.getOutputStream().flush();
-        httpURLConnection.getOutputStream().close();
-    }
-    @Override
-    public  String getResponse(HttpURLConnection httpURLConnection) throws Exception {
-        StringBuilder response = new StringBuilder();
-        try (InputStream is = httpURLConnection.getInputStream()) {
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = is.read(buffer)) != -1) {
-                response.append(new String(buffer, 0, bytesRead));
-            }
-        }
-        return response.toString();
     }
 }
