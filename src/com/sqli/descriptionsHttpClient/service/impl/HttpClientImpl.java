@@ -1,6 +1,8 @@
 package com.sqli.descriptionsHttpClient.service.impl;
 
 import com.sqli.descriptionsHttpClient.service.HttpClientService;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.json.JsonObject;
@@ -37,5 +39,16 @@ public class HttpClientImpl implements HttpClientService {
             }
         }
         return response.toString();
+    }
+    public String parseTranslatedTextFromResponse(String response, String prompt) {
+        try {
+            JSONObject jsonResponse = new JSONObject(response.toString());
+            JSONArray choicesArray = jsonResponse.getJSONArray("choices");
+            String text = choicesArray.getJSONObject(0).getString("text");
+            text = text.trim().replace(prompt, "");
+            return text;
+        } catch (Exception e ){
+            return e.getMessage();
+        }
     }
 }

@@ -8,5 +8,4 @@ public interface ProductDescriptionService {
    String generateProductDescription(String productName, String features) throws Exception;
     String createPrompt(String productName, String features);
     JsonObject createRequestBody(String prompt);
-    String extractDescriptionText(String response, String prompt);
 }

@@ -27,8 +27,6 @@ import java.util.*;
 
 @Service
 public class ProductTranslationServiceImpl implements ProductTranslationService {
-    @Value("${OpenAI.API_KEY}")
-    private String API_KEY;
     @Value("${OpenAI.API_URL}")
     private String API_URL;
     private FlexibleSearchService flexibleSearchService;
@@ -44,7 +42,7 @@ public class ProductTranslationServiceImpl implements ProductTranslationService 
 
     @Override
     public List<ProductModel> getAllProducts() {
-        // String query = "SELECT DISTINCT {p:pk} FROM {Product AS p} WHERE {p:description} is not null";
+        //String query = "SELECT DISTINCT {p:pk} FROM {Product AS p} WHERE {p:description} is not null";
         String query = "SELECT DISTINCT {p:pk} FROM {Product AS p} WHERE {p:code} = ?code";
         FlexibleSearchQuery searchQuery = new FlexibleSearchQuery(query);
         searchQuery.addQueryParameter("code", 300441142);
@@ -93,25 +91,12 @@ public class ProductTranslationServiceImpl implements ProductTranslationService 
             // Get the response from the API
             String response = this.httpClientService.getResponse(httpURLConnection);
             // Parse the response JSON and retrieve the translated text
-            String translatedText = parseTranslatedTextFromResponse(response);
+            String translatedText = this.httpClientService.parseTranslatedTextFromResponse(response, prompt);
             return translatedText;
         } catch (Exception e) {
             LOG.error(e.getMessage());
         }
         return description; // Return the original text if the translation fails
-    }
-
-    @Override
-    public String parseTranslatedTextFromResponse(String response) {
-        try {
-            JSONObject jsonResponse = new JSONObject(response.toString());
-            JSONArray choicesArray = jsonResponse.getJSONArray("choices");
-            String text = choicesArray.getJSONObject(0).getString("text");
-            text = text.trim().replace(response, "");
-            return text;
-        } catch (Exception e) {
-            return e.getMessage();
-        }
     }
 
     @Override

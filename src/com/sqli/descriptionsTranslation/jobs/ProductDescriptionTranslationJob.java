@@ -23,7 +23,6 @@ public class ProductDescriptionTranslationJob extends AbstractJobPerformable<Pro
     public ProductDescriptionTranslationJob(ProductTranslationService productTranslationService) {
         this.productTranslationService = productTranslationService;
     }
-
     @Override
     public PerformResult perform(final ProductDescriptionTranslationCronJobModel args0) {
         try {
@@ -31,22 +30,16 @@ public class ProductDescriptionTranslationJob extends AbstractJobPerformable<Pro
             List<ProductModel> products = this.productTranslationService.getAllProducts();
             List<String> languages = this.productTranslationService.getLanguages();
             for (ProductModel product : products) {
-                // Generate translations for each language
-                for (int i = 0 ; i< 3; i++) {
+                for (int i = 0 ; i< languages.size(); i++) {
                    Locale locale = new Locale(languages.get(i).toLowerCase(), languages.get(i).toUpperCase());
-                   if(!languages.get(i).equals("en") || !languages.get(i).equals("fr")){
-                       System.out.println("not en or fr"+ languages.get(i));
                        if (product.getDescription(locale) == null || product.getDescription(locale).isEmpty() || product.getDescription(locale).isBlank() || product.getDescription(locale).equals("")) {
                            String translatedDescription = this.productTranslationService.generateTranslation(product.getDescription(), languages.get(i));
                            this.productTranslationService.saveTranslatedDescription(product, languages.get(i), translatedDescription);
-                       }
                    }
-
                 }
                 return new PerformResult(CronJobResult.ERROR, CronJobStatus.ABORTED);
             }
         } catch (Exception e) {
-            e.getMessage();
             return new PerformResult(CronJobResult.ERROR, CronJobStatus.ABORTED);
         }
         return new PerformResult(CronJobResult.SUCCESS, CronJobStatus.FINISHED);

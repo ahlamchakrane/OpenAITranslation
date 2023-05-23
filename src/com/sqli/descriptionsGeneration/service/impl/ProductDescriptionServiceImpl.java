@@ -14,8 +14,6 @@ import java.net.URL;
 
 @Service
 public class ProductDescriptionServiceImpl implements ProductDescriptionService {
-    @Value("${OpenAI.API_KEY}")
-    private String API_KEY ;
     @Value("${OpenAI.API_URL}")
     private String API_URL;
     private HttpClientService httpClientService;
@@ -30,7 +28,7 @@ public class ProductDescriptionServiceImpl implements ProductDescriptionService 
         HttpURLConnection httpURLConnection = this.httpClientService.createConnection(url);
         this.httpClientService.sendRequest(httpURLConnection, body);
         String response = this.httpClientService.getResponse(httpURLConnection);
-        String description = extractDescriptionText(response, prompt);
+        String description = this.httpClientService.parseTranslatedTextFromResponse(response, prompt);
         return description;
     }
 
@@ -47,15 +45,4 @@ public class ProductDescriptionServiceImpl implements ProductDescriptionService 
                 .build();
     }
 
-    public String extractDescriptionText(String response, String prompt) {
-        try {
-            JSONObject jsonResponse = new JSONObject(response.toString());
-            JSONArray choicesArray = jsonResponse.getJSONArray("choices");
-            String text = choicesArray.getJSONObject(0).getString("text");
-            text = text.trim().replace(prompt, "");
-            return text;
-        } catch (Exception e ){
-            return e.getMessage();
-        }
-    }
 }
