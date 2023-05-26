@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------
  * --- WARNING: THIS FILE IS GENERATED AND WILL BE OVERWRITTEN! ---
- * --- Generated at 23 mai 2023 à 15:37:30                      ---
+ * --- Generated at 25 mai 2023 à 18:27:09                      ---
  * ----------------------------------------------------------------
  */
 package com.sqli.constants;
@@ -18,6 +18,10 @@ public class GeneratedOpenAIAutoDescriptionGeneratorConstants
 	{
 		public static final String PRODUCTDESCRIPTIONGENERATIONCRONJOB = "ProductDescriptionGenerationCronJob".intern();
 		public static final String PRODUCTDESCRIPTIONTRANSLATIONCRONJOB = "ProductDescriptionTranslationCronJob".intern();
+	}
+	public static class Attributes
+	{
+		// no constants defined.
 	}
 	
 	protected GeneratedOpenAIAutoDescriptionGeneratorConstants()

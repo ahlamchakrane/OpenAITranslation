@@ -37,8 +37,20 @@
 		</itemtype>
 		-->
 		<itemtype code="ProductDescriptionGenerationCronJob" extends="CronJob" autocreate="true" generate="true" jaloclass="com.sqli.jalo.ProductDescriptionGenerationCronJob">
+			<attributes>
+				<attribute qualifier="Product_ID" type="java.lang.String">
+					<persistence type="property" />
+					<description>You can choose what product you want to generate it's description</description>
+				</attribute>
+			</attributes>
 		</itemtype>
 		<itemtype code="ProductDescriptionTranslationCronJob" extends="CronJob" autocreate="true" generate="true" jaloclass="com.sqli.jalo.ProductDescriptionTranslationCronJob">
+			<attributes>
+				<attribute qualifier="Product_ID" type="java.lang.String">
+					<persistence type="property" />
+					<description>You can choose what product you want to generate its translations</description>
+				</attribute>
+			</attributes>
 		</itemtype>
 	</itemtypes>
 </items>

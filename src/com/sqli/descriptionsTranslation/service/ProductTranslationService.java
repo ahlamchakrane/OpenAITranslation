@@ -1,18 +1,17 @@
 package com.sqli.descriptionsTranslation.service;
-import de.hybris.platform.core.model.c2l.LanguageModel;
+import com.sqli.exceptions.GenerationException;
+import com.sqli.exceptions.HttpClientException;
 import de.hybris.platform.core.model.product.ProductModel;
 
-import javax.json.JsonObject;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
+import java.net.MalformedURLException;
 import java.util.List;
-import java.util.Locale;
+import java.util.Map;
 
 public interface ProductTranslationService {
     List<ProductModel> getAllProducts();
     List<String> getLanguages();
     void saveTranslatedDescription(ProductModel product, String language, String translatedDescription);
-    String generateTranslation(String description, String targetLanguage);
-    String createPrompt(String targetLanguage);
+    Map<String, String> generateTranslations(String description, List<String> targetLanguages) throws HttpClientException, GenerationException, MalformedURLException;
+
+    String createPrompt(List<String> targetLanguages);
 }
