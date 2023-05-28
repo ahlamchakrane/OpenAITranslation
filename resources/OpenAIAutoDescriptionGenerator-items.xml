@@ -41,6 +41,8 @@
 				<attribute qualifier="Product_ID" type="java.lang.String">
 					<persistence type="property" />
 					<description>You can choose what product you want to generate it's description</description>
+					<defaultvalue>29533</defaultvalue>
+					<modifiers read="true" write="true" initial="true" optional="false" />
 				</attribute>
 			</attributes>
 		</itemtype>
@@ -49,6 +51,18 @@
 				<attribute qualifier="Product_ID" type="java.lang.String">
 					<persistence type="property" />
 					<description>You can choose what product you want to generate its translations</description>
+					<defaultvalue>29533</defaultvalue>
+					<modifiers read="true" write="true" initial="true" optional="false" />
+				</attribute>
+			</attributes>
+		</itemtype>
+		<itemtype code="CommentsModerationCronJob" extends="CronJob" autocreate="true" generate="true" jaloclass="com.sqli.jalo.CommentsModerationCronJob">
+			<attributes>
+				<attribute qualifier="Review_ID" type="java.lang.String">
+					<persistence type="property" />
+					<description>You can choose what review/comment you want to filter it's containt</description>
+					<defaultvalue>8796093055025</defaultvalue>
+					<modifiers read="true" write="true" initial="true" optional="false" />
 				</attribute>
 			</attributes>
 		</itemtype>

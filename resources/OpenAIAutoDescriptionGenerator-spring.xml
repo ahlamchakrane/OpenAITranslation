@@ -90,9 +90,11 @@
 
     <!-- ProductDescription generation -->
     <bean id="httpClientService" class="com.sqli.descriptionsHttpClient.service.impl.HttpClientImpl" />
-
     <bean id="productDescriptionService" class="com.sqli.descriptionsGeneration.service.impl.ProductDescriptionServiceImpl" >
         <constructor-arg ref="httpClientService"/>
+        <constructor-arg ref="flexibleSearchService" />
+        <constructor-arg ref="classificationService"/>
+        <constructor-arg ref="modelService" />
     </bean>
     <bean id="productDescriptionGenerationJob" class="com.sqli.descriptionsGeneration.jobs.ProductDescriptionGenerationJob" parent="abstractJob">
         <property name="sessionService" ref="defaultSessionService"/>
@@ -113,5 +115,16 @@
         <constructor-arg ref="productTranslationService" />
     </bean>
     <!--/ ProductTranslation generation -->
+    <!-- Comments moderation -->
+    <bean id="commentsModerationService" class="com.sqli.commentsModeration.service.impl.CommentsModerationServiceImpl">
+        <constructor-arg ref="flexibleSearchService"/>
+        <constructor-arg ref="modelService"/>
+        <constructor-arg ref="httpClientService" />
+    </bean>
+
+    <bean id="commentsModerationJob" class="com.sqli.commentsModeration.jobs.CommentsModerationJob" parent="abstractJob">
+        <property name="sessionService" ref="defaultSessionService"/>
+    </bean>
+    <!--/ Comments moderation -->
 
 </beans>

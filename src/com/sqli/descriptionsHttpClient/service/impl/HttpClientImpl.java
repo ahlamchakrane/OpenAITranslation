@@ -4,9 +4,11 @@ import com.sqli.descriptionsHttpClient.service.HttpClientService;
 import com.sqli.exceptions.GenerationException;
 import com.sqli.exceptions.HttpClientException;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 
+import javax.json.Json;
 import javax.json.JsonObject;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,38 +60,22 @@ public class HttpClientImpl implements HttpClientService {
         return response.toString();
     }
     @Override
-    public Map<String, String> parseTranslatedTextsFromResponse(String response, String prompt) throws GenerationException {
-        Map<String, String> translations = new HashMap<>();
-
-        try {
-            String text = new JSONObject(response)
-                    .getJSONArray("choices")
-                    .getJSONObject(0)
-                    .getString("text")
-                    .trim()
-                    .replace(prompt, "");
-
-            Arrays.stream(text.split("\n"))
-                    .map(segment -> segment.split(": ", 2))
-                    .filter(parts -> parts.length == 2)
-                    .forEach(parts -> translations.put(parts[0], parts[1]));
-
-        } catch (Exception e) {
-            throw new GenerationException("Failed to parse translated text from response.", e);
-        }
-
-        return translations;
+    public String extractResponseText(HttpURLConnection httpURLConnection, String prompt) throws JSONException, HttpClientException {
+        String response = getResponse(httpURLConnection);
+        return new JSONObject(response)
+                .getJSONArray("choices")
+                .getJSONObject(0)
+                .getString("text")
+                .trim()
+                .replace(prompt, "");
     }
-
     @Override
-    public String parseDescripitonTextFromResponse(String response, String prompt) throws GenerationException {
-        try {
-            JSONObject jsonResponse = new JSONObject(response);
-            JSONArray choicesArray = jsonResponse.getJSONArray("choices");
-            String text = choicesArray.getJSONObject(0).getString("text");
-            return text.trim().replace(prompt, "");
-        } catch (Exception e) {
-            throw new GenerationException("Failed to parse translated text from response.", e);
-        }
+    public JsonObject createRequestBody(String prompt, int maxTokens) {
+        return Json.createObjectBuilder()
+                .add("prompt", prompt)
+                .add("max_tokens", maxTokens )
+                .add("temperature", 0)
+                .add("n", 1)
+                .build();
     }
 }

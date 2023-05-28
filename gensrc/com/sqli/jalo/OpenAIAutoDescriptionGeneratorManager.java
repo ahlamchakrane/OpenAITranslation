@@ -1,12 +1,13 @@
 /*
  * ----------------------------------------------------------------
  * --- WARNING: THIS FILE IS GENERATED AND WILL BE OVERWRITTEN! ---
- * --- Generated at 25 mai 2023 à 18:27:09                      ---
+ * --- Generated at 28 mai 2023 à 13:25:12                      ---
  * ----------------------------------------------------------------
  */
 package com.sqli.jalo;
 
 import com.sqli.constants.OpenAIAutoDescriptionGeneratorConstants;
+import com.sqli.jalo.CommentsModerationCronJob;
 import com.sqli.jalo.ProductDescriptionGenerationCronJob;
 import com.sqli.jalo.ProductDescriptionTranslationCronJob;
 import de.hybris.platform.directpersistence.annotation.SLDSafe;
@@ -46,6 +47,32 @@ public class OpenAIAutoDescriptionGeneratorManager extends Extension
 			ret.putAll(attr);
 		}
 		return ret;
+	}
+	
+	public CommentsModerationCronJob createCommentsModerationCronJob(final SessionContext ctx, final Map attributeValues)
+	{
+		try
+		{
+			ComposedType type = getTenant().getJaloConnection().getTypeManager().getComposedType("CommentsModerationCronJob");
+			return (CommentsModerationCronJob)type.newInstance( ctx, attributeValues );
+		}
+		catch( JaloGenericCreationException e)
+		{
+			final Throwable cause = e.getCause();
+			throw (cause instanceof RuntimeException ?
+			(RuntimeException)cause
+			:
+			new JaloSystemException( cause, cause.getMessage(), e.getErrorCode() ) );
+		}
+		catch( JaloBusinessException e )
+		{
+			throw new JaloSystemException( e ,"error creating CommentsModerationCronJob : "+e.getMessage(), 0 );
+		}
+	}
+	
+	public CommentsModerationCronJob createCommentsModerationCronJob(final Map attributeValues)
+	{
+		return createCommentsModerationCronJob( getSession().getSessionContext(), attributeValues );
 	}
 	
 	public ProductDescriptionGenerationCronJob createProductDescriptionGenerationCronJob(final SessionContext ctx, final Map attributeValues)
