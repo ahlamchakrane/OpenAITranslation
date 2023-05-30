@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------
  * --- WARNING: THIS FILE IS GENERATED AND WILL BE OVERWRITTEN! ---
- * --- Generated at 28 mai 2023 à 13:25:12                      ---
+ * --- Generated at 30 mai 2023 à 11:09:56                      ---
  * ----------------------------------------------------------------
  */
 package com.sqli.constants;

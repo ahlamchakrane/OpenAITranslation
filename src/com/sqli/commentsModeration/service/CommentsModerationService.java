@@ -11,6 +11,6 @@ public interface CommentsModerationService {
     List<CustomerReviewModel> getAllReviews();
     List<CustomerReviewModel> getReviewById(String reviewId);
     void filterReviews(List<CustomerReviewModel> reviews) throws MalformedURLException, HttpClientException, GenerationException;
-    double analyzeNegativityFromAPI(String comment) throws HttpClientException, GenerationException, MalformedURLException;
+    double analyzeContentFromAPI(String comment) throws HttpClientException, GenerationException, MalformedURLException;
 
 }

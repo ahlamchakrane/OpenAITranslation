@@ -28,20 +28,24 @@ public class CommentsModerationJob extends AbstractJobPerformable<CommentsModera
     public PerformResult perform(final CommentsModerationCronJobModel cronJobModel) {
         List<CustomerReviewModel> reviews;
         String reviewId = cronJobModel.getReview_ID();
-        if (reviewId == null || reviewId.trim().isEmpty()) {
+
+        if (reviewId.equals(String.valueOf(-1)) || reviewId.trim().isEmpty()) {
             reviews = commentsModerationService.getAllReviews();
         } else {
             reviews = commentsModerationService.getReviewById(reviewId);
         }
-        try {
-            commentsModerationService.filterReviews(reviews);
-        } catch (MalformedURLException e ) {
-            throw new RuntimeException(e);
-        } catch (HttpClientException e) {
-            throw new RuntimeException(e);
-        } catch (GenerationException e) {
-            throw new RuntimeException(e);
+        if(reviews != null) {
+            try {
+                commentsModerationService.filterReviews(reviews);
+            } catch (MalformedURLException e ) {
+                throw new RuntimeException(e);
+            } catch (HttpClientException e) {
+                throw new RuntimeException(e);
+            } catch (GenerationException e) {
+                throw new RuntimeException(e);
+            }
+            return new PerformResult(CronJobResult.SUCCESS, CronJobStatus.FINISHED);
         }
-        return new PerformResult(CronJobResult.SUCCESS, CronJobStatus.FINISHED);
+        return new PerformResult(CronJobResult.ERROR, CronJobStatus.ABORTED);
     }
 }

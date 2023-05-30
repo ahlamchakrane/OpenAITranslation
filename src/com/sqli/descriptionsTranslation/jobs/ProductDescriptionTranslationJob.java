@@ -44,7 +44,7 @@ public class ProductDescriptionTranslationJob extends AbstractJobPerformable<Pro
     private void processTranstalions() throws MalformedURLException, HttpClientException, GenerationException, JSONException {
         List<ProductModel> products;
         List<String> languages;
-        if (this.productId == null || this.productId.trim().isEmpty()) {
+        if (this.productId.equals(String.valueOf(-1))  || this.productId.trim().isEmpty()) {
             products = productTranslationService.getAllProductsNeedsTranslation();
             languages = productTranslationService.getAllAvailableLanguages();
         } else {

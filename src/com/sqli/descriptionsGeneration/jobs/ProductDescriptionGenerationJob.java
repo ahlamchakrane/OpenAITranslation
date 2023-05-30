@@ -21,7 +21,7 @@ public class ProductDescriptionGenerationJob extends AbstractJobPerformable<Prod
     public PerformResult perform(final ProductDescriptionGenerationCronJobModel cronJobModel)  {
        List<ProductModel> products;
        String productId = cronJobModel.getProduct_ID();
-       if (productId == null || productId.trim().isEmpty()) {
+       if (productId.equals(String.valueOf(-1)) || productId.trim().isEmpty()) {
            products = productDescriptionService.getProductsWithoutDescription();
        } else {
            products = productDescriptionService.getProductById(productId);

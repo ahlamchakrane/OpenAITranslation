@@ -124,6 +124,7 @@
 
     <bean id="commentsModerationJob" class="com.sqli.commentsModeration.jobs.CommentsModerationJob" parent="abstractJob">
         <property name="sessionService" ref="defaultSessionService"/>
+        <constructor-arg ref="commentsModerationService" />
     </bean>
     <!--/ Comments moderation -->
 
